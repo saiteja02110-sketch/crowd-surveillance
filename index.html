@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Real-Time Crowd Surveillance Command Dashboard</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #38bdf8;
+            margin: 0 0 5px 0;
+            font-size: 26px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 14px;
+        }
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 25px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .video-box {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .video-box h3 {
+            margin-top: 0;
+            color: #f1f5f9;
+            text-align: left;
+            border-left: 4px solid #38bdf8;
+            padding-left: 10px;
+        }
+        .live-stream {
+            width: 100%;
+            max-width: 720px;
+            border-radius: 6px;
+            border: 2px solid #334155;
+            background: #000;
+        }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .metric-card {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .metric-card h4 {
+            margin: 0 0 10px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .status-normal {
+            color: #10b981;
+        }
+        .status-alert {
+            color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>AI Proactive Crowd Safety Surveillance Dashboard</h1>
+        <p>Saveetha School of Engineering • Real-Time Anomaly Analysis Engine</p>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="video-box">
+            <h3>MOBILE LIVE NETWORK CAMERA Feed #001</h3>
+            <video class="live-stream" autoplay muted loop playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-security-camera-pan-of-an-empty-office-41551-large.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="control-panel">
+            <div class="metric-card">
+                <h4>People Flow Tracking Analysis</h4>
+                <p id="status-text" class="metric-value status-normal">INITIALIZING...</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>Estimated Crowd Size Count</h4>
+                <p id="count-text" class="metric-value" style="color: #f59e0b;">0 People</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>Mobility Density Index</h4>
+                <p id="density-text" class="metric-value" style="color: #a855f7;">CALIBRATING</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>Motion Information Entropy Matrix</h4>
+                <p id="entropy-text" class="metric-value" style="color: #38bdf8;">0.00 H(x)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setInterval(async () => {
+            try {
+                const response = await fetch('/system_metrics');
+                const data = await response.json();
+                
+                const statusElement = document.getElementById('status-text');
+                statusElement.innerText = data.status;
+                
+                if(data.status === "ERRATIC SURGE ALERT") {
+                    statusElement.className = "metric-value status-alert";
+                } else {
+                    statusElement.className = "metric-value status-normal";
+                }
+                
+                document.getElementById('count-text').innerText = data.count + " People";
+                document.getElementById('density-text').innerText = data.density;
+                document.getElementById('entropy-text').innerText = data.entropy + " H(x)";
+            } catch (error) {
+                console.error("Telemetry channel connection interrupted:", error);
+            }
+        }, 300);
+    </script>
+</body>
+</html>
