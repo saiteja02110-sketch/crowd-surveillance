@@ -29,7 +29,7 @@ int getLatestEvent() {
 }
 
 void get_telemetry_json(char *buffer) {
-    int current_count = (rand() % 70) + 50; // Fluctuates between 50 and 120 people
+    int current_count = (rand() % 70) + 50; // Fluctuates naturally between 50 and 120
     enqueue(current_count);
     
     int latest = getLatestEvent();
